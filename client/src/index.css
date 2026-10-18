@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5 { font-family: var(--display); }
 .brand-logo { width: 165px; height: 72px; object-fit: contain; object-position: left center; mix-blend-mode: multiply; }
 .brand-logo--footer { width: 185px; height: 80px; }
 .nav-links { display: flex; align-items: center; gap: 32px; margin-left: auto; }
-.nav-links a { position: relative; padding-bottom: 4px; color: var(--text-primary); font-family: var(--display); font-size: .88rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+.nav-links a { position: relative; padding-bottom: 4px; color: var(--text-primary); font-family: var(--display); font-size: .94rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
 .nav-links a::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: var(--accent); transition: width .3s; }
 .nav-links a:hover, .nav-links a.active { color: var(--primary-dark); }
 .nav-links a:hover::after { width: 100%; }
@@ -269,7 +269,7 @@ h1, h2, h3, h4, h5 { font-family: var(--display); }
   .footer-grid { gap: 30px; }
   .footer-col { min-width: 0; }
   .why-card { padding: 20px 16px; }
-  .route-pill { padding: 15px 12px; font-size: .77rem; }
+  .route-pill { padding: 14px 12px; font-size: .88rem; }
 }
 @media (max-width: 420px) {
   .why-grid, .routes-grid, .about-cards { grid-template-columns: 1fr; }
