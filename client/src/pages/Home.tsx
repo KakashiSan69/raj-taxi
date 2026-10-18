@@ -48,9 +48,9 @@ const heroSlides = [
 ];
 
 const stats = [
-  { value: "4930", label: "Happy Customers" },
-  { value: "34", label: "Expert Drivers" },
-  { value: "6", label: "Vehicle Types", icon: CarFront },
+  { value: "4930+", label: "Happy Customers" },
+  { value: "34+", label: "Expert Drivers" },
+  { value: "6+", label: "Vehicle Types", icon: CarFront },
   { value: "24/7", label: "Always Available" },
 ];
 
@@ -109,7 +109,10 @@ const testimonials = [
 ];
 
 function AnimatedStatValue({ value }: { value: string }) {
-  const isNumeric = /^\d+$/.test(value);
+  const match = value.match(/^(\d+)(\+)?$/);
+  const isNumeric = Boolean(match);
+  const suffix = match?.[2] ?? "";
+  const target = Number(match?.[1] ?? 0);
   const [count, setCount] = useState(isNumeric ? 0 : value);
   const [started, setStarted] = useState(!isNumeric);
   const statRef = useRef<HTMLElement>(null);
@@ -128,7 +131,6 @@ function AnimatedStatValue({ value }: { value: string }) {
 
   useEffect(() => {
     if (!isNumeric || !started) return;
-    const target = Number(value);
     const duration = 1500;
     let frame = 0;
     let startTime: number | null = null;
@@ -143,7 +145,7 @@ function AnimatedStatValue({ value }: { value: string }) {
     return () => cancelAnimationFrame(frame);
   }, [isNumeric, started, value]);
 
-  return <strong ref={statRef}>{isNumeric ? count : value}</strong>;
+  return <strong ref={statRef}>{isNumeric ? `${count}${suffix}` : value}</strong>;
 }
 
 function Home() {
