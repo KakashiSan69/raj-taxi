@@ -187,7 +187,7 @@ function Home() {
           <button className="carousel-control carousel-control--prev" onClick={() => setActiveSlide((activeSlide + heroSlides.length - 1) % heroSlides.length)} aria-label="Previous slide">‹</button>
           <div className="container hero-inner"><div className="hero-content">
             <span className="hero-badge">{slide.tag}</span>
-            <h1>{slide.title}</h1>
+            <h1>{activeSlide === 0 ? "Book Taxi & Cab Service in Varanasi" : slide.title}</h1>
             <p className="hero-subtitle">{slide.copy}</p>
             <div className="hero-actions"><a className="button button--gold" href={`tel:${PHONE_TEL}`}><Phone size={17} /> Call Now</a><a className="button button--ghost" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp</a></div>
           </div></div>
