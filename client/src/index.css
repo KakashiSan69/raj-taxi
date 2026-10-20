@@ -197,7 +197,17 @@ h1, h2, h3, h4, h5 { font-family: var(--display); }
 .testi-person strong { color: var(--text-primary); font-size: .9rem; }
 .testi-person span { color: var(--text-secondary); font-size: .78rem; }
 
+/* Google Review QR Box */
+.review-qr-box { margin-top: 48px; display: flex; justify-content: center; }
+.review-qr-inner { display: flex; align-items: center; gap: 32px; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 28px 36px; box-shadow: var(--shadow-soft); max-width: 600px; width: 100%; }
+.review-qr-img { width: 150px; height: 150px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
+.review-qr-text { display: flex; flex-direction: column; gap: 8px; }
+.review-qr-label { margin: 0; font-size: .85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+.review-qr-title { margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--text-primary); }
+.review-qr-sub { margin: 0; color: var(--text-secondary); font-size: .95rem; line-height: 1.6; }
+
 .cta-section { position: relative; overflow: hidden; padding: 40px 0; background: linear-gradient(120deg, #780d16, #c1121f 52%, #8f101c); color: #fff; text-align: center; }
+
 .cta-section::before { content: ""; position: absolute; width: 420px; height: 420px; top: -240px; right: -120px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; box-shadow: 0 0 0 36px rgba(255,255,255,.06), 0 0 0 72px rgba(255,255,255,.035); animation: ringFloat 8s ease-in-out infinite; }
 .cta-inner { max-width: 780px; }
 .cta-inner h2 { margin: 0 0 14px; font-size: clamp(1.8rem, 3vw, 2.6rem); }

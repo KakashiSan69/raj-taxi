@@ -31,7 +31,7 @@ const PHONE_DISPLAY = "7991800467";
 const PHONE_TEL = "7991800467";
 const WHATSAPP_NUMBER = "917991800467";
 const EMAIL = "kartikeymishra528@gmail.com";
-const ADDRESS = "Vishwanath Puram Colony, Chitaipur, Awleshpur, Varanasi, Uttar Pradesh";
+const ADDRESS = "Jankinagar Colony Lane No 4, DLW Rd, Bajardiha, Varanasi, Uttar Pradesh 221005";
 
 const navItems: [string, string][] = [
   ["About", "#about"],
@@ -209,7 +209,18 @@ function Home() {
 
         <section id="routes" className="section routes-section"><div className="container"><div className="section-head"><p className="kicker">Go Further</p><h2 className="section-title">Popular Routes <em>Made Easy</em></h2><p className="section-lede">Reliable rides across Varanasi and the destinations travelers love to visit.</p></div><div className="routes-grid">{routes.map((route) => <a className="route-pill" key={route} href={`tel:${PHONE_TEL}`}><MapPin size={18} />{route}</a>)}</div></div></section>
 
-        <section id="reviews" className="section testi-section"><div className="container"><div className="section-head"><p className="kicker">Traveler Notes</p><h2 className="section-title">Loved By <em>Travelers</em></h2></div><div className="testi-grid">{testimonials.map((testimonial) => <article className="testi-card" key={testimonial.name}><span className="testi-quote">&ldquo;</span><div className="testi-stars">{Array.from({ length: 5 }).map((_, index) => <Star key={index} size={16} fill="currentColor" />)}</div><p>{testimonial.text}</p><div className="testi-person"><span className="testi-avatar"><img src={testimonial.image} alt={`${testimonial.name} testimonial`} loading="lazy" /></span><div><strong>{testimonial.name}</strong><span>{testimonial.place}</span></div></div></article>)}</div></div></section>
+        <section id="reviews" className="section testi-section"><div className="container"><div className="section-head"><p className="kicker">Traveler Notes</p><h2 className="section-title">Loved By <em>Travelers</em></h2></div><div className="testi-grid">{testimonials.map((testimonial) => <article className="testi-card" key={testimonial.name}><span className="testi-quote">&ldquo;</span><div className="testi-stars">{Array.from({ length: 5 }).map((_, index) => <Star key={index} size={16} fill="currentColor" />)}</div><p>{testimonial.text}</p><div className="testi-person"><span className="testi-avatar"><img src={testimonial.image} alt={`${testimonial.name} testimonial`} loading="lazy" /></span><div><strong>{testimonial.name}</strong><span>{testimonial.place}</span></div></div></article>)}</div>
+          <div className="review-qr-box">
+            <div className="review-qr-inner">
+              <img src="/images/google-review-qr.png" alt="Scan to leave a Google Review for Shreyansh Tour And Travels" className="review-qr-img" />
+              <div className="review-qr-text">
+                <p className="review-qr-label">Happy with your ride?</p>
+                <h4 className="review-qr-title">Rate Us on Google</h4>
+                <p className="review-qr-sub">Scan the QR code to leave us a review — it means the world to us! 🙏</p>
+              </div>
+            </div>
+          </div>
+        </div></section>
 
         <section className="cta-section"><div className="container cta-inner"><h2>Ready For A Better Ride?</h2><p>Tell us where you are going — we will help make the journey simple.</p><div className="cta-actions"><a className="button button--gold" href={`tel:${PHONE_TEL}`}><Phone size={17} /> Call Now</a><a className="button button--wa" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp Us</a></div></div></section>
       </main>
