@@ -1,234 +1,134 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
-  Briefcase,
+  BriefcaseBusiness,
   CarFront,
-  CheckCircle2,
+  Check,
   Clock3,
-  Compass,
-  Facebook,
-  Headphones,
-  HeartHandshake,
-  Instagram,
-  Mail,
   MapPin,
   Menu,
   MessageCircle,
-  Phone,
+  Navigation,
   Plane,
   Route,
   ShieldCheck,
   Star,
-  Twitter,
   Users,
-  Wallet,
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-const PHONE_DISPLAY = "7991800467";
-const PHONE_TEL = "7991800467";
-const WHATSAPP_NUMBER = "917991800467";
-const EMAIL = "kartikeymishra528@gmail.com";
-const ADDRESS = "Jankinagar Colony Lane No 4, DLW Rd, Bajardiha, Varanasi, Uttar Pradesh 221005";
+const PHONE_DISPLAY = "9070399070";
+const PHONE_TEL = "9070399070";
+const WHATSAPP = "919070399070";
+const BUSINESS = "One Way Taxi Nagpur";
+const ADDRESS = "Dr. Babasaheb Ambedkar International Airport, MRO Air India, MIHAN, Nagpur, Maharashtra, 440005";
+const MAP_URL = "https://www.google.com/maps/dir/?api=1&destination=One+Way+Taxi+Nagpur%2C+Dr.+Babasaheb+Ambedkar+International+Airport%2C+MRO+Air+India%2C+MIHAN%2C+Nagpur%2C+Maharashtra%2C+440005";
 
-const navItems: [string, string][] = [
-  ["About", "#about"],
-  ["Choose Your Ride", "#fleet"],
-  ["Services", "#services"],
-  ["Routes", "#routes"],
-  ["Reviews", "#reviews"],
+const services: { icon: LucideIcon; title: string; copy: string; tone: string }[] = [
+  { icon: Plane, title: "Airport Pickup & Drop", copy: "Comfortable, punctual rides to and from Dr. Babasaheb Ambedkar International Airport.", tone: "orange" },
+  { icon: Navigation, title: "Railway Station Transfer", copy: "Easy station pickups and drops with a driver who is ready when you arrive.", tone: "blue" },
+  { icon: Route, title: "One Way Taxi", copy: "Pay for the route you need and travel across Nagpur and Maharashtra without the return fare.", tone: "violet" },
+  { icon: CarFront, title: "Local & Rental Taxi", copy: "Book a sedan, SUV or luxury vehicle for a few hours, a full day or a custom plan.", tone: "green" },
+  { icon: BriefcaseBusiness, title: "Corporate Taxis", copy: "Professional, discreet transport for meetings, events and business schedules.", tone: "rose" },
+  { icon: Users, title: "Outstation Trips", copy: "Reliable intercity travel for family plans, weekend trips and long-distance journeys.", tone: "gold" },
 ];
 
-const heroSlides = [
-  { image: "/images/generated/hero-varanasi-night.jpg", tag: "Your Varanasi Journey Starts Here", title: "Travel Varanasi In Comfort", copy: "Comfortable rides, thoughtful service and dependable drivers for every Varanasi journey." },
-  { image: "/images/generated/hero-ghat-sunrise.jpg", tag: "See More. Stress Less.", title: "A Better Way To Discover Varanasi", copy: "Clean cars, courteous drivers and clear pricing exactly how travel should feel." },
-  { image: "/images/generated/hero-temple-road.jpg", tag: "Your Journey, Our Priority", title: "Reliable Rides. Memorable Journeys.", copy: "From airport pickups to full-day temple tours, your ride is ready when you are." },
+const fleet = [
+  { name: "Sedan", detail: "Comfortable city and airport travel", image: "/images/generated/fleet-etios.jpg" },
+  { name: "SUV", detail: "More room for family and luggage", image: "/images/generated/fleet-innova-crysta.jpg" },
+  { name: "Luxury Vehicle", detail: "Premium travel for important plans", image: "/images/generated/fleet-honda-city.jpg" },
 ];
 
-const stats = [
-  { value: "4930+", label: "Happy Customers" },
-  { value: "34+", label: "Expert Drivers" },
-  { value: "6+", label: "Vehicle Types", icon: CarFront },
-  { value: "24/7", label: "Always Available" },
+const reviews = [
+  { name: "Mala Ram", copy: "Apke sath ride karke acha lga", place: "Google review" },
+  { name: "Salman", copy: "Good service", place: "Google review" },
+  { name: "Browns Block", copy: "Nice service", place: "Google review" },
 ];
 
-const fleet: { name: string; tag: string; copy: string; image: string }[] = [
-  { name: "Maruti Ertiga", tag: "7 Seater", copy: "Roomy, practical and perfect for family days out or group travel.", image: "/images/generated/fleet-ertiga.jpg" },
-  { name: "Toyota Etios", tag: "Sedan", copy: "A smooth, spacious sedan for easy city rides and longer journeys.", image: "/images/generated/fleet-etios.jpg" },
-  { name: "Honda City", tag: "Premium", copy: "A refined sedan for airport transfers, business travel and special days.", image: "/images/generated/fleet-honda-city.jpg" },
-  { name: "Swift Dzire", tag: "Budget", copy: "Smart, comfortable and easy on the budget for everyday rides.", image: "/images/generated/fleet-swift-dzire.jpg" },
-  { name: "Innova Crysta", tag: "Luxury", copy: "Extra space and premium comfort for relaxed family and outstation travel.", image: "/images/generated/fleet-innova-crysta.jpg" },
-  { name: "Tempo Traveller", tag: "Group", copy: "Spacious group travel made easy for tours, events and family plans.", image: "/images/generated/fleet-tempo-traveller.jpg" },
-  { name: "12 Seater Tempo Traveller", tag: "12 Seater", copy: "A practical, comfortable choice for medium-sized groups and tours.", image: "/images/generated/fleet-tempo-12-seater.jpg" },
-];
-
-const aboutCards: { icon: LucideIcon; title: string; copy: string }[] = [
-  { icon: ShieldCheck, title: "Safe & Verified", copy: "100% police-verified drivers with background checks." },
-  { icon: Clock3, title: "Always On Time", copy: "We respect your schedule and guarantee punctual service." },
-  { icon: Wallet, title: "Clear From The Start", copy: "No hidden charges. Fair and upfront pricing always." },
-  { icon: Headphones, title: "Here When You Need Us", copy: "Our team is available around the clock to assist you." },
-];
-
-const services: { icon: LucideIcon; title: string; copy: string }[] = [
-  { icon: Plane, title: "Airport Transfers", copy: "Scheduled airport pickups and drop-offs with timely coordination, courteous chauffeurs and comfortable vehicles." },
-  { icon: Compass, title: "Outstation Travel", copy: "Reliable intercity travel to Sarnath, Ayodhya, Prayagraj, Bodh Gaya and destinations across North India." },
-  { icon: MapPin, title: "Varanasi Sightseeing", copy: "Explore ghats, temples and local landmarks with knowledgeable chauffeurs and flexible sightseeing stops." },
-  { icon: Briefcase, title: "Corporate Mobility", copy: "Dependable transportation for meetings, conferences and business schedules with professional service." },
-  { icon: Route, title: "Hotel & Station Transfers", copy: "Seamless door-to-door transfers between hotels, airports, railway stations and key attractions." },
-  { icon: Users, title: "Group & Event Travel", copy: "Spacious, coordinated travel for families, tour groups and events with vehicles suited to your party." },
-];
-
-const whyChoose: { icon: LucideIcon; title: string; copy: string }[] = [
-  { icon: ShieldCheck, title: "Peace Of Mind", copy: "Verified drivers and dependable cars for a relaxed journey." },
-  { icon: BadgeCheck, title: "People You Can Trust", copy: "Polite, experienced chauffeurs who put your comfort first." },
-  { icon: Star, title: "Comfort Every Time", copy: "Fresh, clean and air-conditioned vehicles for every ride." },
-  { icon: Wallet, title: "Clear From The Start", copy: "Straightforward fares with no surprises at the end." },
-  { icon: Clock3, title: "Punctual By Promise", copy: "Your time matters, so we aim to be there when we say we will." },
-  { icon: Headphones, title: "Here When You Need Us", copy: "Friendly support whenever your journey needs a helping hand." },
-  { icon: MapPin, title: "Know The Way", copy: "Local knowledge that helps every ride feel easier and more direct." },
-  { icon: HeartHandshake, title: "Chosen By Travelers", copy: "A growing community of travelers chooses us for comfortable, dependable rides." },
-];
-
-const routes = [
-  "Varanasi Airport ↔ City Centre",
-  "Varanasi ↔ Sarnath",
-  "Varanasi ↔ Ayodhya",
-  "Varanasi ↔ Prayagraj",
-  "Varanasi ↔ Lucknow",
-  "Varanasi ↔ Bodh Gaya",
-  "Varanasi ↔ Vindhyachal",
-  "Varanasi ↔ Outstation",
-];
-
-const testimonials = [
-  { text: "The driver was polite, the car was spotless and the whole ride felt effortless. I will book again.", name: "Amit Sharma", place: "Varanasi", image: "/images/generated/avatar-amit.jpg" },
-  { text: "A wonderful way to see Varanasi. Our driver was helpful, calm and knew every important stop.", name: "Pooja Singh", place: "Varanasi", image: "/images/generated/avatar-pooja.jpg" },
-  { text: "Clear pricing, a clean car and an on-time pickup. Exactly the kind of service every trip needs.", name: "Rajesh Verma", place: "DLW, Varanasi", image: "/images/generated/avatar-rajesh.jpg" },
-];
-
-function AnimatedStatValue({ value }: { value: string }) {
-  const match = value.match(/^(\d+)(\+)?$/);
-  const isNumeric = Boolean(match);
-  const suffix = match?.[2] ?? "";
-  const target = Number(match?.[1] ?? 0);
-  const [count, setCount] = useState(isNumeric ? 0 : value);
-  const [started, setStarted] = useState(!isNumeric);
-  const statRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!isNumeric || !statRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setStarted(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.45 });
-    observer.observe(statRef.current);
-    return () => observer.disconnect();
-  }, [isNumeric]);
-
-  useEffect(() => {
-    if (!isNumeric || !started) return;
-    const duration = 1500;
-    let frame = 0;
-    let startTime: number | null = null;
-    const easeOut = (progress: number) => 1 - Math.pow(1 - progress, 3);
-    const tick = (timestamp: number) => {
-      if (startTime === null) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(target * easeOut(progress)));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [isNumeric, started, value]);
-
-  return <strong ref={statRef}>{isNumeric ? `${count}${suffix}` : value}</strong>;
+function openWhatsApp(message = "Hello One Way Taxi Nagpur, I would like to enquire about a taxi.") {
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
 }
 
 function Home() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
-    const timer = window.setInterval(() => setActiveSlide((current) => (current + 1) % heroSlides.length), 5500);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.clearInterval(timer);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
-  const openWhatsApp = (message: string) => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
-  const bookMessage = (vehicle = "a vehicle") => openWhatsApp(`Hello Shreyansh Tour And Travels, I would like to book ${vehicle}. Please share availability and quotation.`);
-  const slide = heroSlides[activeSlide];
 
   return (
     <div className="site-shell">
-      <div className="topbar"><Star size={13} fill="currentColor" /><span>VARANASI&apos;S MOST RELIABLE RIDE PARTNER BOOK NOW AT <strong>{PHONE_DISPLAY}</strong></span><Star size={13} fill="currentColor" /></div>
-
-      <header className={`site-nav ${scrolled ? "site-nav--scrolled" : ""}`}>
+      <div className="notice-bar"><Clock3 size={15} /> Open 24 hours, Monday–Sunday <span>•</span> Nagpur &amp; Maharashtra</div>
+      <header className={`site-nav ${scrolled ? "is-scrolled" : ""}`}>
         <div className="container nav-inner">
-          <a className="brand" href="#home" aria-label="Shreyansh Tour And Travels home"><img src="/images/shreyansh-logo.png" alt="Shreyansh Tour And Travels Logo" className="brand-logo" /></a>
-          <nav className={`nav-links ${menuOpen ? "nav-links--open" : ""}`} aria-label="Main navigation">
-            {navItems.map(([label, href]) => <a key={href} href={href} onClick={closeMenu}>{label}</a>)}
-            <a className="nav-book-mobile button button--gold" href={`tel:${PHONE_TEL}`} onClick={closeMenu}><Phone size={15} /> {PHONE_DISPLAY}</a>
+          <a href="#home" className="wordmark" aria-label={`${BUSINESS} home`} onClick={closeMenu}>
+            <span className="wordmark-icon">O</span>
+            <span><strong>One Way Taxi</strong><small>NAGPUR</small></span>
+          </a>
+          <nav className={`nav-links ${menuOpen ? "is-open" : ""}`}>
+            <a href="#services" onClick={closeMenu}>Services</a>
+            <a href="#about" onClick={closeMenu}>About</a>
+            <a href="#fleet" onClick={closeMenu}>Fleet</a>
+            <a href="#reviews" onClick={closeMenu}>Reviews</a>
+            <a href="#contact" onClick={closeMenu}>Contact</a>
+            <a className="mobile-call" href={`tel:${PHONE_TEL}`} onClick={closeMenu}>Call {PHONE_DISPLAY}</a>
           </nav>
-          <div className="nav-actions"><a className="nav-phone" href={`tel:${PHONE_TEL}`}><Phone size={15} /> {PHONE_DISPLAY}</a><button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
+          <div className="nav-actions">
+            <a className="nav-phone" href={`tel:${PHONE_TEL}`}>Call {PHONE_DISPLAY}</a>
+            <button className="menu-button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
+          </div>
         </div>
       </header>
 
       <main id="home">
-        <section className="hero hero-carousel" style={{ backgroundImage: `url(${slide.image})` }}>
-          <div className="hero-overlay" />
-          <button className="carousel-control carousel-control--prev" onClick={() => setActiveSlide((activeSlide + heroSlides.length - 1) % heroSlides.length)} aria-label="Previous slide">‹</button>
-          <div className="container hero-inner"><div className="hero-content">
-            <span className="hero-badge">{slide.tag}</span>
-            <h1>{activeSlide === 0 ? "Book Taxi & Cab Service in Varanasi" : slide.title}</h1>
-            <p className="hero-subtitle">{slide.copy}</p>
-            <div className="hero-actions"><a className="button button--gold" href={`tel:${PHONE_TEL}`}><Phone size={17} /> Call Now</a><a className="button button--ghost" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp</a></div>
-          </div></div>
-          <button className="carousel-control carousel-control--next" onClick={() => setActiveSlide((activeSlide + 1) % heroSlides.length)} aria-label="Next slide">›</button>
-          <div className="carousel-dots">{heroSlides.map((item, index) => <button key={item.title} className={index === activeSlide ? "active" : ""} onClick={() => setActiveSlide(index)} aria-label={`Go to slide ${index + 1}`} />)}</div>
-        </section>
-
-        <section className="stats"><div className="container stats-grid">{stats.map(({ value, label, icon: Icon }) => <div className="stat" key={label}>{Icon && <Icon size={31} className="stat-icon" />}<AnimatedStatValue value={value} /><span>{label}</span></div>)}</div></section>
-
-        <section id="fleet" className="section fleet-section"><div className="container"><div className="section-head"><p className="kicker">Choose Your Ride</p><h2 className="section-title">Comfort For <em>Every Journey</em></h2><p className="section-lede">Choose a clean, comfortable vehicle that fits your route, group and travel style.</p></div><div className="fleet-grid">{fleet.map((vehicle) => <article className="fleet-card" key={`${vehicle.name}-${vehicle.tag}`}><div className="fleet-image-wrap"><img src={vehicle.image} alt={vehicle.name} loading="lazy" /><span className="fleet-tag">{vehicle.tag}</span></div><div className="fleet-content"><h3>{vehicle.name}</h3><p>{vehicle.copy}</p><a className="fleet-book" href={`tel:${PHONE_TEL}`}>Book Now <ArrowRight size={15} /></a></div></article>)}</div></div></section>
-
-        <section id="about" className="section about-section"><div className="container about-layout"><div className="about-copy"><p className="kicker">The Shreyansh Difference</p><h2 className="section-title">Travel With <em>Confidence</em></h2><p>At <strong>Shreyansh Tour And Travels</strong>, every ride is shaped around your comfort. From the first pickup to the final drop, we make Varanasi travel feel simple, safe and beautifully unhurried.</p><p>Our local drivers know the ghats, temples and best routes so you can spend less time navigating and more time enjoying Varanasi.</p><a className="button button--green" href={`tel:${PHONE_TEL}`}><Phone size={16} /> Call Us Now</a></div><div className="about-cards">{aboutCards.map(({ icon: Icon, title, copy }) => <div className="about-card" key={title}><div className="ic"><Icon size={22} /></div><h5>{title}</h5><p>{copy}</p></div>)}</div></div></section>
-
-        <section id="services" className="section services-section"><div className="container"><div className="section-head"><p className="kicker">Travel Made Simple</p><h2 className="section-title">Services Built <em>Around You</em></h2><p className="section-lede">From the first pickup to the final drop, enjoy thoughtful service at every turn.</p></div><div className="services-grid">{services.map(({ icon: Icon, title, copy }) => <article className="service-card" key={title}><div className="service-ic"><Icon size={26} /></div><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section>
-
-        <section className="section why-section"><div className="container"><div className="section-head"><p className="kicker">Why Ride With Us</p><h2 className="section-title">Every Trip Feels <em>Better</em></h2><p className="section-lede">Small details, dependable service and a better experience from pickup to drop-off.</p></div><div className="why-grid">{whyChoose.map(({ icon: Icon, title, copy }) => <div className="why-card" key={title}><div className="ic"><Icon size={22} /></div><h5>{title}</h5><p>{copy}</p></div>)}</div></div></section>
-
-        <section id="routes" className="section routes-section"><div className="container"><div className="section-head"><p className="kicker">Go Further</p><h2 className="section-title">Popular Routes <em>Made Easy</em></h2><p className="section-lede">Reliable rides across Varanasi and the destinations travelers love to visit.</p></div><div className="routes-grid">{routes.map((route) => <a className="route-pill" key={route} href={`tel:${PHONE_TEL}`}><MapPin size={18} />{route}</a>)}</div></div></section>
-
-        <section id="reviews" className="section testi-section"><div className="container"><div className="section-head"><p className="kicker">Traveler Notes</p><h2 className="section-title">Loved By <em>Travelers</em></h2></div><div className="testi-grid">{testimonials.map((testimonial) => <article className="testi-card" key={testimonial.name}><span className="testi-quote">&ldquo;</span><div className="testi-stars">{Array.from({ length: 5 }).map((_, index) => <Star key={index} size={16} fill="currentColor" />)}</div><p>{testimonial.text}</p><div className="testi-person"><span className="testi-avatar"><img src={testimonial.image} alt={`${testimonial.name} testimonial`} loading="lazy" /></span><div><strong>{testimonial.name}</strong><span>{testimonial.place}</span></div></div></article>)}</div>
-          <div className="review-qr-box">
-            <div className="review-qr-inner">
-              <img src="/images/google-review-qr.png" alt="Scan to leave a Google Review for Shreyansh Tour And Travels" className="review-qr-img" />
-              <div className="review-qr-text">
-                <p className="review-qr-label">Happy with your ride?</p>
-                <h4 className="review-qr-title">Rate Us on Google</h4>
-                <p className="review-qr-sub">Scan the QR code to leave us a review it means the world to us! 🙏</p>
-              </div>
+        <section className="hero-new">
+          <div className="hero-image" />
+          <div className="hero-shade" />
+          <div className="container hero-layout">
+            <div className="hero-copy">
+              <div className="eyebrow"><span className="eyebrow-dot" /> Trusted taxi service in Nagpur</div>
+              <h1>Book a Taxi/Cab in <span>Nagpur, Mumbai &amp; Pune</span></h1>
+              <p>Safe, comfortable and reliable rides for airport transfers, local travel, one-way routes and outstation journeys across Maharashtra.</p>
+              <div className="hero-actions"><a className="primary-button" href={`tel:${PHONE_TEL}`}>Book your ride <ArrowUpRight size={18} /></a><button className="light-button" onClick={() => openWhatsApp()}>WhatsApp us <MessageCircle size={18} /></button></div>
+              <div className="hero-points"><span><Check size={15} /> 24×7 availability</span><span><Check size={15} /> Sedan, SUV &amp; luxury</span><span><Check size={15} /> Clear, friendly service</span></div>
+            </div>
+            <div className="booking-card">
+              <div className="booking-card-top"><span>QUICK ENQUIRY</span><BadgeCheck size={20} /></div>
+              <h2>Where do you want to go?</h2>
+              <p>Tell us what you need and our team will help you choose the right ride.</p>
+              <a href={`tel:${PHONE_TEL}`} className="booking-line"><span className="booking-icon"><PhoneIcon /></span><span><small>Call us directly</small><strong>{PHONE_DISPLAY}</strong></span><ArrowUpRight size={18} /></a>
+              <button className="booking-line" onClick={() => openWhatsApp("Hello One Way Taxi Nagpur, please share taxi availability and pricing.")}><span className="booking-icon whatsapp"><MessageCircle size={20} /></span><span><small>Message on WhatsApp</small><strong>Get a quick quote</strong></span><ArrowUpRight size={18} /></button>
+              <div className="booking-note"><ShieldCheck size={16} /> Available 24 hours, every day</div>
             </div>
           </div>
-        </div></section>
+        </section>
 
-        <section className="cta-section"><div className="container cta-inner"><h2>Ready For A Better Ride?</h2><p>Tell us where you are going we will help make the journey simple.</p><div className="cta-actions"><a className="button button--gold" href={`tel:${PHONE_TEL}`}><Phone size={17} /> Call Now</a><a className="button button--wa" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp Us</a></div></div></section>
+        <section className="trust-strip"><div className="container trust-grid"><div><strong>5.0/5</strong><span>Google rating</span></div><div><strong>6+</strong><span>Google reviews</span></div><div><strong>24×7</strong><span>Always available</span></div><div><strong>MH</strong><span>Local &amp; outstation</span></div></div></section>
+
+        <section id="services" className="section services-new"><div className="container"><div className="section-intro"><span className="section-label">What we do</span><h2>One booking. <em>Every kind of ride.</em></h2><p>From a quick airport pickup to a long-distance one-way trip, choose a service that fits your day.</p></div><div className="services-grid-new">{services.map(({ icon: Icon, title, copy, tone }) => <article className="service-tile" key={title}><div className={`service-icon ${tone}`}><Icon size={23} /></div><h3>{title}</h3><p>{copy}</p><button onClick={() => openWhatsApp(`Hello One Way Taxi Nagpur, I am interested in ${title}.`)}>Enquire <ArrowUpRight size={16} /></button></article>)}</div></div></section>
+
+        <section id="about" className="section about-new"><div className="container about-layout-new"><div className="about-visual"><img src="/images/hero-expressway.png" alt="Comfortable taxi on a highway" loading="lazy" /><div className="about-badge"><Star size={18} fill="currentColor" /><span><strong>5.0 / 5</strong><small>Google rating</small></span></div></div><div className="about-copy-new"><span className="section-label">Why One Way Taxi</span><h2>Travel with a local team you can <em>count on.</em></h2><p>One Way Taxi Nagpur provides safe, comfortable and trustworthy taxi service across Nagpur and Maharashtra. Our goal is simple: make every pickup clear, every ride comfortable and every arrival on time.</p><div className="check-list"><span><ShieldCheck size={19} /> Safe and dependable drivers</span><span><Clock3 size={19} /> Punctual pickup and drop</span><span><BadgeCheck size={19} /> Comfortable vehicle options</span><span><MapPin size={19} /> Local routes, airport and outstation</span></div><a className="text-link" href={MAP_URL} target="_blank" rel="noreferrer">Find our location <ArrowUpRight size={17} /></a></div></div></section>
+
+        <section id="fleet" className="section fleet-new"><div className="container"><div className="section-intro split"><div><span className="section-label">Choose your ride</span><h2>The right car for <em>your plan.</em></h2></div><p>Choose from comfortable Sedan, spacious SUV and premium luxury vehicles for local or outstation travel.</p></div><div className="fleet-grid-new">{fleet.map((vehicle) => <article className="fleet-tile" key={vehicle.name}><img src={vehicle.image} alt={`${vehicle.name} taxi`} loading="lazy" /><div><span>Available to book</span><h3>{vehicle.name}</h3><p>{vehicle.detail}</p><a href={`tel:${PHONE_TEL}`}>Book this ride <ArrowUpRight size={16} /></a></div></article>)}</div></div></section>
+
+        <section id="reviews" className="section reviews-new"><div className="container"><div className="section-intro centered"><span className="section-label">Google reviews</span><h2>Good rides create <em>good words.</em></h2><p>What passengers say about their experience with One Way Taxi Nagpur.</p></div><div className="reviews-grid-new">{reviews.map((review) => <article className="review-tile" key={review.name}><div className="stars">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={16} fill="currentColor" />)}</div><p>“{review.copy}”</p><strong>{review.name}</strong><span>{review.place}</span></article>)}</div></div></section>
+
+        <section id="contact" className="contact-new"><div className="container contact-layout"><div><span className="section-label light">Start your journey</span><h2>Need a taxi? <span>We are ready.</span></h2><p>Call or message One Way Taxi Nagpur for availability, pricing and route guidance.</p></div><div className="contact-actions"><a className="primary-button" href={`tel:${PHONE_TEL}`}>Call {PHONE_DISPLAY} <ArrowUpRight size={18} /></a><a className="light-button" href={MAP_URL} target="_blank" rel="noreferrer"><MapPin size={18} /> Get directions</a></div></div></section>
       </main>
 
-      <footer className="site-footer"><div className="container footer-grid"><div className="footer-brand"><a className="brand" href="#home" aria-label="Shreyansh Tour And Travels home"><img src="/images/shreyansh-logo.png" alt="Shreyansh Tour And Travels Logo" className="brand-logo brand-logo--footer" /></a><p>Comfortable taxi rides, thoughtful local service and dependable travel across Varanasi available 24/7.</p><div className="footer-social"><a href="#home" aria-label="Facebook"><Facebook size={18} /></a><a href="#home" aria-label="Instagram"><Instagram size={18} /></a><a href="#home" aria-label="Twitter"><Twitter size={18} /></a><button className="footer-social-btn" onClick={() => bookMessage()} aria-label="WhatsApp"><MessageCircle size={18} /></button></div></div><div className="footer-col"><h5>Quick Links</h5><div className="footer-links">{navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div></div><div className="footer-col"><h5>Contact Us</h5><div className="footer-contact"><a href={`tel:${PHONE_TEL}`}><Phone size={16} /> {PHONE_DISPLAY}</a><a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp: {PHONE_DISPLAY}</a><a href={`mailto:${EMAIL}`}><Mail size={16} /> {EMAIL}</a><span><MapPin size={16} /> {ADDRESS}</span></div></div></div><div className="footer-bottom"><div className="container">&copy; {new Date().getFullYear()} Shreyansh Tour And Travels. All Rights Reserved.</div></div></footer>
-      <div className="floating-actions"><a className="floating-call" href={`tel:${PHONE_TEL}`} aria-label="Call Shreyansh Tour And Travels"><Phone size={20} /></a><a className="floating-wa" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer" aria-label="WhatsApp Shreyansh Tour And Travels"><MessageCircle size={22} /></a></div>
+      <footer className="footer-new"><div className="container footer-layout"><div><a href="#home" className="wordmark footer-wordmark"><span className="wordmark-icon">O</span><span><strong>One Way Taxi</strong><small>NAGPUR</small></span></a><p>Safe, comfortable and trustworthy taxi service for Nagpur and Maharashtra.</p></div><div><h4>Quick links</h4><a href="#services">Services</a><a href="#about">About us</a><a href="#fleet">Fleet</a><a href="#contact">Contact</a></div><div><h4>Contact</h4><a href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a><a href={MAP_URL} target="_blank" rel="noreferrer">{ADDRESS}</a><span>Open 24 hours, Monday–Sunday</span></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} {BUSINESS}. All rights reserved.</span><span>Taxi Service · Nagpur, Maharashtra</span></div></footer>
+      <div className="floating-actions"><a className="floating-call" href={`tel:${PHONE_TEL}`} aria-label="Call One Way Taxi Nagpur"><PhoneIcon /></a><button className="floating-whatsapp" onClick={() => openWhatsApp()} aria-label="WhatsApp One Way Taxi Nagpur"><MessageCircle size={21} /></button></div>
     </div>
   );
 }
+
+function PhoneIcon() { return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z" /></svg>; }
 
 export default Home;
